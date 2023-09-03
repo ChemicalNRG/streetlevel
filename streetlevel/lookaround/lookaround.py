@@ -80,8 +80,8 @@ def get_panorama_face(pano: Union[LookaroundPanorama, Tuple[int, int]],
     :param session: *(optional)* A requests session.
     :return: The HEIC file containing the face.
     """
-    panoid, region_id = _panoid_to_string(pano)
-    url = _build_panorama_face_url(panoid, region_id, int(face), zoom, auth)
+    id, region_id = _panoid_to_string(pano)
+    url = _build_panorama_face_url(id, region_id, int(face), zoom, auth)
     requester = session if session else requests
     response = requester.get(url)
 
@@ -116,7 +116,7 @@ async def get_panorama_face_async(pano: Union[LookaroundPanorama, Tuple[int, int
                                   face: Face, zoom: int,
                                   auth: Authenticator, session: ClientSession) -> bytes:
     panoid, region_id = _panoid_to_string(pano)
-    url = _build_panorama_face_url(panoid, region_id, int(face), zoom, auth)
+    url = _build_panorama_face_url(id, region_id, int(face), zoom, auth)
     async with session.get(url) as response:
         if response.ok:
             return await response.read()
@@ -134,16 +134,16 @@ async def download_panorama_face_async(pano: Union[LookaroundPanorama, Tuple[int
 
 def _panoid_to_string(pano):
     if isinstance(pano, LookaroundPanorama):
-        panoid, region_id = str(pano.id), str(pano.region_id)
+        id, region_id = str(pano.id), str(pano.region_id)
     else:
-        panoid, region_id = str(pano[0]), str(pano[1])
+        id, region_id = str(pano[0]), str(pano[1])
 
-    if len(panoid) > 20:
+    if len(id) > 20:
         raise ValueError("panoid must not be longer than 20 digits.")
     if len(region_id) > 10:
         raise ValueError("region_id must not be longer than 10 digits.")
 
-    return panoid, region_id
+    return id, region_id
 
 
 def _parse_panos(tile, tile_x, tile_y):
@@ -156,7 +156,7 @@ def _parse_panos(tile, tile_x, tile_y):
             tile_y)
         heading = _convert_heading(lat, lon, raw_pano.location.heading)
         pano = LookaroundPanorama(
-            raw_pano.panoid,
+            raw_pano.id,
             tile.unknown13[raw_pano.region_id_idx].region_id,
             lat,
             lon,
