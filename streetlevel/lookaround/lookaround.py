@@ -196,12 +196,12 @@ def _protobuf_tile_offset_to_wgs84(x_offset: int, y_offset: int, tile_x: int, ti
     return lat, lon
 
 
-def _build_panorama_face_url(panoid: str, region_id: str, face: int, zoom: int, auth: Authenticator) -> str:
+def _build_panorama_face_url(id: str, region_id: str, face: int, zoom: int, auth: Authenticator) -> str:
     zoom = min(7, zoom)
-    panoid_padded = panoid.zfill(20)
-    panoid_split = [panoid_padded[i:i + 4] for i in range(0, len(panoid_padded), 4)]
-    panoid_url = "/".join(panoid_split)
+    id_padded = id.zfill(20)
+    id_split = [id_padded[i:i + 4] for i in range(0, len(id_padded), 4)]
+    id_url = "/".join(id_split)
     region_id_padded = region_id.zfill(10)
-    url = FACE_ENDPOINT + f"{panoid_url}/{region_id_padded}/t/{face}/{zoom}"
+    url = FACE_ENDPOINT + f"{id_url}/{region_id_padded}/t/{face}/{zoom}"
     url = auth.authenticate_url(url)
     return url
