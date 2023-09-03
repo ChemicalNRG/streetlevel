@@ -115,7 +115,7 @@ def download_panorama_face(pano: Union[LookaroundPanorama, Tuple[int, int]],
 async def get_panorama_face_async(pano: Union[LookaroundPanorama, Tuple[int, int]],
                                   face: Face, zoom: int,
                                   auth: Authenticator, session: ClientSession) -> bytes:
-    panoid, region_id = _panoid_to_string(pano)
+    id, region_id = _panoid_to_string(pano)
     url = _build_panorama_face_url(id, region_id, int(face), zoom, auth)
     async with session.get(url) as response:
         if response.ok:
