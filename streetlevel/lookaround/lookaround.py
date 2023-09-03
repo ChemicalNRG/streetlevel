@@ -156,7 +156,7 @@ def _parse_panos(tile, tile_x, tile_y):
             tile_y)
         heading = _convert_heading(lat, lon, raw_pano.location.heading)
         pano = LookaroundPanorama(
-            raw_pano.id,
+            raw_pano.panoid,
             tile.unknown13[raw_pano.region_id_idx].region_id,
             lat,
             lon,
